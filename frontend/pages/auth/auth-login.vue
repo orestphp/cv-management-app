@@ -77,29 +77,41 @@ export default {
         dialog: false,
         errorClass: '',
     }),
+
     methods: {
-        async login() {
+        
+     async login() {
             try {
-                await this.$axios.$get('sanctum/csrf-cookie');
-                const user = await this.$auth.loginWith('laravelSanctum', {
-                    data: this.form,
+                // The 'laravelSanctum' strategy automatically:
+                // 1. Calls /sanctum/csrf-cookie
+                // 2. Posts to your login endpoint
+                // 3. Fetches the user data and saves it in Vuex
+                await this.$auth.loginWith('laravelSanctum', {
+                    data: {
+                        email: this.form.email,
+                        password: this.form.password
+                    }
                 });
 
-                console.log('Successful login', user);
-
-                this.$router.push('/cv-list');
+                console.log('Successful login');
+                // User is now globally available via this.$auth.user
+                this.$router.push('/cv-list'); 
+                
             } catch (err) {
-                console.log(err);
+                console.error("Login failed:", err);
                 this.dialog = true;
+                this.errorClass = 'error';
+                
+                // Helpful tip: err.response.data usually contains Laravel's validation errors
+                const message = err.response?.data?.error || 'These credentials do not match our records.';
+                
                 setTimeout(() => {
-                    // Use arrow function to preserve 'this' context
-                    this.errorClass = 'error';
                     document.getElementById('cv-alert-title').innerHTML = 'Error:';
-                    document.getElementById('cv-alert-message').innerHTML =
-                        'These credentials do not match our records.';
+                    document.getElementById('cv-alert-message').innerHTML = message;
                 }, 0);
             }
-        },
+        }
+        
     },
 };
 </script>

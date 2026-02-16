@@ -1,21 +1,29 @@
-FROM php:8.1.8-fpm-buster
+# Upgrade from the old Buster image to a current one
+FROM php:8.2-fpm
 
-ENV COMPOSER_ALLOW_SUPERUSER=1 \
-  COMPOSER_HOME=/composer
+# Set working directory
+WORKDIR /laravel
 
+# Install composer
 COPY --from=composer:2.4 /usr/bin/composer /usr/bin/composer
 
-RUN apt-get update && \
-  apt-get -y install git unzip libzip-dev libicu-dev libonig-dev nano && \
-  apt-get clean && \
-  rm -rf /var/lib/apt/lists/* && \
-  docker-php-ext-install intl pdo_mysql zip bcmath
+# Install system dependencies
+# Bookworm (the new Debian) handles these packages much better
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    libzip-dev \
+    libicu-dev \
+    libonig-dev \
+    libpng-dev \
+    nano && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug
-
-COPY ./php.ini /usr/local/etc/php/php.ini
+# Install PHP extensions
+RUN docker-php-ext-install intl pdo_mysql zip bcmath gd
 
 COPY php.ini /usr/local/etc/php/
 
-WORKDIR /laravel
+# Set permissions for Laravel
+RUN chown -R www-data:www-data /laravel

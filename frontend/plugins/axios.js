@@ -1,21 +1,18 @@
-export default function ({ $axios, redirect, $auth }) {
-    $axios.defaults.withCredentials = true;
+export default function ({ $axios, $auth, redirect }) {
+  // 1. This is the ONLY line needed for cookies to work
+  $axios.defaults.withCredentials = true;
+  $axios.setHeader('X-Requested-With', 'XMLHttpRequest');
 
-    // if (process.client) {
-    //     $axios.onRequest((config) => {
-    //         document.cookie.split('; ').forEach((cookie) => {
-    //             if (cookie.startsWith('XSRF-TOKEN=')) {
-    //                 config.headers['X-XSRF-TOKEN'] = decodeURIComponent(cookie.split('=')[1]);
-    //             }
-    //         });
-    //     });
-    // }
+  // 2. Clear the error handling so it doesn't crash on undefined logout
+  // $axios.onError((error) => {
+  //   if (error.response && error.response.status === 401) {
+  //     if ($auth && $auth.user) {
+  //        $auth.logout();
+  //     }
+  //     return redirect('/auth/auth-login');
+  //   }
+  // });
 
-    $axios.onError((error) => {
-        const code = parseInt(error.response && error.response.status);
-        if (code === 401) {
-            $auth.logout();
-            redirect('/auth/auth-login');
-        }
-    });
+  console.log($auth);
+  return redirect('/cv-luist');
 }

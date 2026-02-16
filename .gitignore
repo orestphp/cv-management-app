@@ -1,3 +1,4 @@
 .env
 /frontend/.history
 .idea
+find . -type d -print0 |

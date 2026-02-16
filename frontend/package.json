@@ -2,7 +2,7 @@
     "name": "nuxt-vuetify-dashboard",
     "version": "1.0.2",
     "description": "Nuxt.js + Vuetify.js project",
-    "author": "Orest Lozynsky <orest.lozynsky@devit.group",
+    "author": "Orest Lozynsky <orest.b2b@gmail.com",
     "private": true,
     "scripts": {
         "dev": "nuxt",

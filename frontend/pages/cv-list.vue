@@ -105,18 +105,21 @@ export default {
 
         async initialize() {
             let self = this;
-            //await this.$axios.$get('sanctum/csrf-cookie', { withCredentials: true });
             await this.$axios
-                .get('/api/cv', { withCredentials: true })
-                .then(function (response) {
+                .get('/api/cv-list', { withCredentials: true })
+                .then((response) => {
                     console.log(response);
-                    if (response.data) {
+                    // Handle Laravel Pagination vs Simple Collection
+                    // If paginated, data is in response.data.data. If not, it's response.data
+                    const tempCvs = response.data.data ? response.data.data : response.data;
+
+                    if (Array.isArray(tempCvs)) {
                         const tempCvs = response.data;
-                        self.setCvs(tempCvs); // store
+                        this.setCvs(tempCvs); // store
                         tempCvs.forEach((cv) => {
                             const name = cv.first_name + ' ' + cv.surname;
                             // local
-                            self.cvs.push({
+                            this.cvs.push({
                                 id: cv.id,
                                 title: cv.title,
                                 email: cv.email,
@@ -127,10 +130,10 @@ export default {
                         });
                     }
                 })
-                .catch(function (error) {
-                    console.log('error:');
+                .catch((error) => {
                     console.error(error);
-                    window.location.href = '/auth/auth-login';
+                    self.$auth.logout();
+                    self.$router.push('/auth/auth-login');
                 });
         },
 

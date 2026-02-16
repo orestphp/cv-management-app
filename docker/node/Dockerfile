@@ -1,29 +1,28 @@
-FROM node:20.9.0-alpine
+FROM node:20.9.0-alpine3.17
 
 WORKDIR /app
 
-ENV PYTHONUNBUFFERED=1
-RUN apk update && \
-    apk add --no-cache build-base python3 py3-pip && \
-    ln -sf python3 /usr/bin/python && \
-    pip3 install --no-cache-dir --upgrade pip setuptools
+# Install python and pip via apk (System packages)
+# This bypasses the "externally-managed-environment" error
+RUN apk add --no-cache python3 py3-pip build-base
 
-# Clean up Yarn installation conflicts
-RUN rm -f /usr/local/bin/yarnpkg && \
-    rm -f /usr/local/bin/yarn && \
-    npm install -g yarn@1.21.1
+# Create a virtual environment for any python-based node tools
+RUN python3 -m venv /venv
+ENV PATH="/venv/bin:$PATH"
 
-# Ensure user 'node' is used
+# Fix Yarn conflicts
+RUN rm -f /usr/local/bin/yarnpkg /usr/local/bin/yarn \
+    && npm install -g yarn@1.21.1
+
+# Set permissions
 RUN chown -R node:node /app
 USER node
 
-# Copy package.json and install dependencies before copying full code
+# Copy files relative to the context (the project root '.')
 COPY --chown=node:node frontend/package.json frontend/yarn.lock ./
+
 RUN yarn install --frozen-lockfile
 
-# Copy the rest of the frontend source code
 COPY --chown=node:node frontend ./
-
-RUN yarn install
 
 CMD ["yarn", "run", "dev"]

@@ -27,6 +27,33 @@ use PHPUnit\Exception;
 class UserController extends Controller
 {
 
+    public function login(Request $request)
+    {
+
+        // Inside login method:
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        Auth::login($user);
+        // SUCCESS: The session is now authenticated
+
+        $request->session()->regenerate(); // Security best practice
+
+        if(Auth::user()) {
+            return response()->json([
+                'message' => 'Login successful',
+                'user' => Auth::user()
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Invalid email or password'
+            ], 401);
+        }        
+    }
+
     /** Change admin password
      *
      * @param Request $request

@@ -24,7 +24,7 @@ services:
     ports:
       - $NGINX_PORT:80
     volumes:
-      - $BACKEND_DIR:/laravel
+      - ./api:/laravel
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     working_dir: $NGINX_DIR
     depends_on:
@@ -34,39 +34,40 @@ services:
 
   # MySQL
   db:
-    build:
-      context: ./docker/mysql
-      args:
-        MYSQL_DATABASE: $MYSQL_DATABASE
-        MYSQL_USER: $MYSQL_USER
-        MYSQL_PASSWORD: $MYSQL_PASSWORD
-        MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
-    volumes:
-      - db-data:/var/lib/mysql
-    ports:
-      - $DB_PORT:3306
-    networks:
-      - cv-network
+      build:
+        context: .
+        dockerfile: docker/mysql/Dockerfile
+        args:
+          # These pull from your .env file
+          MYSQL_DATABASE: ${MYSQL_DATABASE}
+          MYSQL_USER: ${MYSQL_USER}
+          MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+          MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      volumes:
+        - db-data:/var/lib/mysql
+      ports:
+        - '${DB_PORT:-3306}:3306'
+      networks:
+        - cv-network
 
-  # node, nuxt(front)
   front:
-    build:
-      context: .
-      dockerfile: docker/node/Dockerfile
-    command: yarn run dev
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules  # Prevents overwriting node_modules inside the container
-    working_dir: /app
-    ports:
-      - '$FRONT_PORT:3000'
-      - '$STORYBOOK_PORT:6006'
-    init: true
-    restart: on-failure
-    user: "node"
-    networks:
-      - cv-network
-
+      build:
+        context: .
+        dockerfile: docker/node/Dockerfile  # This matches your screenshot path exactly
+      command: yarn run dev
+      volumes:
+        - ./frontend:/app
+        - /app/node_modules
+      working_dir: /app
+      ports:
+        - '$FRONT_PORT:3000'
+        - '$STORYBOOK_PORT:6006'
+      init: true
+      restart: on-failure
+      user: "node"
+      networks:
+        - cv-network
+      
   #phpmyadmin
   phpmyadmin:
     image: phpmyadmin/phpmyadmin

@@ -14,31 +14,12 @@ return [
     | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
     |
     */
-    'paths' => [
-        'api/*',
-        'sanctum/*',
-        'login',
-        'logout',
-        'register',
-        'user/password',
-        'forgot-password',
-        'reset-password',
-        'user/profile-information',
-        'email/verification-notification',
-    ],
-
+    'paths' => ['api/*', 'sanctum/csrf-cookie', 'login', 'logout', 'auth/*'],
     'allowed_methods' => ['*'],
-
     'allowed_origins' => ['http://127.0.0.1:3000', 'http://localhost:3000'],
-
-    'allowed_origins_patterns' => [],
-
     'allowed_headers' => ['*'],
-
     'exposed_headers' => [],
-
     'max_age' => 0,
-
-    'supports_credentials' => true,
+    'supports_credentials' => true, // This MUST be true
 
 ];

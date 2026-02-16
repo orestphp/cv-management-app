@@ -190,7 +190,7 @@ import { mapState, mapGetters, mapMutations } from 'vuex';
 import _ from '../node_modules/lodash'; // *fix for v-model="cv.title" where 'cv' from store
 
 export default {
-    middleware: 'auth',
+    //middleware: 'auth',
     components: { EducationForm, WorkExperienceForm, DobDatePicker, EducationItem, WorkExperienceItem },
     data: () => ({
         strDob: '',

@@ -280,7 +280,7 @@
 import Editor from '~/components/helper/HelperEditor.vue';
 
 export default {
-    middleware: 'auth',
+    //middleware: 'auth',
     components: { Editor },
     data() {
         return {
