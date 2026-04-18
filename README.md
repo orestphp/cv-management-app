@@ -45,6 +45,9 @@ First user must be created via Tinker:
    - `$user->save();`
 
 NOTE: In this version 2, user can be created/changed via Tinker only
+```
+docker compose exec app php artisan tinker
+```
 
 ## Command Glossary
 
