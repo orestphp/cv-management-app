@@ -56,9 +56,7 @@ NOTE: In this version 2, user can be created via Tinker only
    - `docker logs -f <container_id>` - see incomming logs for container
 
 
-/--------------------------/
-## Recently Updated Filed
-/--------------------------/
+## Recently Updated to "v2"
 
 📁 ./cv-management2
    2025-03-21 11:54:26.657380308 +0200  ./cv-management2/cookies.txt
