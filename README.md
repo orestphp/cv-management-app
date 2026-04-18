@@ -38,7 +38,7 @@ http://127.0.0.1:8081/
 
 ## Development
 
-Password can be created/changed via Tinker:
+First user must be created via Tinker:
    - `docker exec -it cv-management2-app-1 php artisan tinker`
    - `$user = App\Models\User::where('email', 'admin@admin.com')->first();`
    - `$user->password = Hash::make('pass');`
