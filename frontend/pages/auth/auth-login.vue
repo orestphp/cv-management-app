@@ -79,8 +79,7 @@ export default {
     }),
 
     methods: {
-        
-     async login() {
+        async login() {
             try {
                 // The 'laravelSanctum' strategy automatically:
                 // 1. Calls /sanctum/csrf-cookie
@@ -89,29 +88,29 @@ export default {
                 await this.$auth.loginWith('laravelSanctum', {
                     data: {
                         email: this.form.email,
-                        password: this.form.password
-                    }
+                        password: this.form.password,
+                    },
                 });
 
                 console.log('Successful login');
                 // User is now globally available via this.$auth.user
-                this.$router.push('/cv-list'); 
-                
+                this.$router.push('/cv-list');
             } catch (err) {
-                console.error("Login failed:", err);
+                console.error('Login failed:', err);
                 this.dialog = true;
                 this.errorClass = 'error';
-                
+
                 // Helpful tip: err.response.data usually contains Laravel's validation errors
-                const message = err.response?.data?.error || 'These credentials do not match our records.';
-                
+                const message =
+                    (err.response && err.response.data && err.response.data.error) ||
+                    'These credentials do not match our records.';
+
                 setTimeout(() => {
                     document.getElementById('cv-alert-title').innerHTML = 'Error:';
                     document.getElementById('cv-alert-message').innerHTML = message;
                 }, 0);
             }
-        }
-        
+        },
     },
 };
 </script>

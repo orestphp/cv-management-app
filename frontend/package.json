@@ -13,6 +13,7 @@
         "lint:fix": "eslint --ext .js --ext .vue --ignore-path .gitignore . --fix"
     },
     "dependencies": {
+        "@babel/plugin-proposal-optional-chaining": "^7.21.0",
         "@ckeditor/ckeditor5-build-classic": "^29.0.0",
         "@ckeditor/ckeditor5-vue2": "^1.0.5",
         "@mdi/font": "^5.9.55",
