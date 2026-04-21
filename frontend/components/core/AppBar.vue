@@ -2,7 +2,7 @@
     <v-app-bar id="core-app-bar" absolute app color="transparent" flat height="50">
         <v-toolbar-title class="tertiary--text font-weight-light align-self-center">
             <v-btn v-if="responsive" dark icon @click.stop="onClick">
-                <v-icon>mdi-view-list</v-icon>
+                <v-icon style="color: #495057 !important;">mdi-view-list</v-icon>
             </v-btn>
             {{ title }}
         </v-toolbar-title>

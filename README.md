@@ -44,7 +44,7 @@ First user must be created via Tinker:
    - `$user->password = Hash::make('pass');`
    - `$user->save();`
 
-NOTE: In this version 2, user can be created/changed via Tinker only
+NOTE: In this version 2, user can be created/changed via Tinker Only
 ```
 docker compose exec app php artisan tinker
 ```
