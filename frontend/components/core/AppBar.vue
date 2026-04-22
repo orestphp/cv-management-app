@@ -85,8 +85,8 @@ export default {
     }),
 
     watch: {
-        $route(val) {
-            this.title = val.name;
+        $route(path) {
+            this.title = path.name;
         },
     },
 
